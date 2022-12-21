@@ -1,176 +1,125 @@
-Boolean landscape=false, portrait=false;
-//
-void displayOrientation() {
-  //Diplay Orientation Algorithm, see Hello World to copy
-  landscape = true; //Harcoded for now
-  //
-}//End displayOrientation
-//
-//End Display and Orientation Subprogram
-float measleX, measleY, measleDiameter;
-color measlesColour;
-//
-void measlesDynamic() {
-  //
-  //Population Code, must stay here
-  measleDiameter = random(appHeight*1/100, appHeight*1/25);
-  float measleRadius = measleDiameter * 1/2;
-  measleX = random(rectFaceX+measleRadius, rectFaceX+rectFaceWidth-measleRadius); //use smallerDimension
-  measleY = random(appHeight*0+measleRadius, appHeight-measleRadius);
-  //Night Mode
-  measlesColour = ( nightMode==true ) ? color( 255, random(0, 55), 0 ) : color( 255, random(0, 55), random(130) ) ;
-  //measlesColour = color( 255, random(0, 55), random(130) );
-  //Pink: ( 255, 0, 130)
-  //Dark red: ( 255, 55, 0)
-  //
-  noStroke();
-  fill(measlesColour);
-  ellipse( measleX, measleY, measleDiameter, measleDiameter );
-  fill(resetWhite);
-  stroke(reset);
-} //End measlesDynamic
-//
-//Emd Draw Measles Subprogram
-float leftEyeX, leftEyeY, rightEyeX, rightEyeY, eyeDiameter;
-//
-void eyes() {
-  leftEye();
-  rightEye();
-} //End eyes
-//
-/* CAUTION: ellipses are easier to draw here then rectangles (squares)
- Thus, using eye-variables first and creating the inscribed rect()
- */
-//
-void leftEye() {
-  //Logical Rectangle for Left Eye, teacher demo, repeated below
-  //Purpose: no measles in eye
-  //Easier layering method
-  //rect(leftEyeX-eyeDiameter*1/2, leftEyeY-eyeDiameter*1/2, eyeDiameter, eyeDiameter);
-  ellipse(leftEyeX, leftEyeY, eyeDiameter, eyeDiameter);
-} //End leftEye
-//
-void rightEye() {
-  //rect(rightEyeX-eyeDiameter*1/2, rightEyeY-eyeDiameter*1/2, eyeDiameter, eyeDiameter);
-  ellipse(rightEyeX, rightEyeY, eyeDiameter, eyeDiameter);
-} //End rightEye
-//End Eyes Subprogram
-float rectFaceX, rectFaceY, rectFaceWidth, rectFaceHeight;
-float faceX, faceY, faceDiameter;
-//
-void faceSetup() {
-  //Face: inscribing a cirlcle in a square (i.e. logical rectangle)
-  //Start from center of display
-  rect(rectFaceX, rectFaceY, rectFaceWidth, rectFaceHeight);
-  ellipse(faceX, faceY, faceDiameter, faceDiameter);
-} //End faceSetup
-//
-//End Face Subprogram
 //Global Variables
-int appWidth, appHeight;
-int reset=1;
-color resetWhite=#FFFFFF;
+
+float xLeftEye, yLeftEye, xRightEye, RightEyey, eyeDiameter;
+float NoseBridgeX, NoseBridgeY, LeftNostrilX, yLeftNostril, xRightNostril, yRightNostril;
+float FaceX, yFace, FacewidthDiameter, heightDiameterFace, FaceRadius, CenterX, smallerDimension;
+float xLeftMouth, yLeftMouth, xRightMouth, yRightMouth;
+String title = "GOAT ELIA";
 Boolean nightMode=false;
+float xLeftEarTip, yLeftEarTip, xLeftEarBase, yleftEarBase, xLeftEarOtherBase, yLeftEarOtherBase;
+float xRightEarTip, yRightEarTip, xRighttEarBase, yRightEarBase, xRightEarOtherBase, RightEarOtherBasey;
+color resetWhite=#FFFFFF, red=#FF0000, blue=#000000, resetDefaultInk=#FFFFFF;//blue2596be
+color backgroundColor;
+float xMeasle, yMeasle, measleDiameter;
+PFont titleFont;
+int titlesize;
+float titleX, titleY, titleWidth, titleHeight;
 //
-void setup() {
-  //Display & Orientation
-  size(600, 400); 
-  displayOrientation();
-  appWidth = width;
-  appHeight = height;
+void setup()
+{
+  //CANVAS will will be added to later
+  size(800, 600); //Landscape
   //
-  population();
-  //Theme: i.e. Face (will work in portrait and landscape)
-  faceSetup(); //Teacher Lesson
-  //Background Image (could be in draw too)
+  //Population
+  CenterX = width/2;
+  float yCenter = height/2;
+  FaceX = CenterX;
+  yFace = yCenter;
+  if ( width >= height ) {
+    smallerDimension = height;
+  } else {
+    smallerDimension = width;
+  }//End dimension choice
+  xRighttEarBase = CenterX + width*7/20;
+  yRightEarBase = yCenter - height*3/20;
+  xRightEarOtherBase = CenterX + width*1/10;
+  RightEarOtherBasey = 20;
+  titleX = width*1/5;
+  titleY = height*9/10;
+  titleWidth = width*3/5;
+  titleHeight = height*1/10;
+  yLeftNostril = yCenter + smallerDimension*1/10;
+  xRightNostril = CenterX + smallerDimension*1/10;
+  yRightNostril = yCenter + smallerDimension*1/10;
+  xLeftMouth = xLeftEye;
+  yLeftMouth = yCenter + smallerDimension*1/4;
+  xRightMouth = xRightEye;
+  yRightMouth = yLeftMouth;
+  FaceRadius = smallerDimension/2;
+  xLeftEarTip = CenterX - width*4/10;
+    FacewidthDiameter = smallerDimension;
+  heightDiameterFace = smallerDimension;
+  xLeftEye = CenterX - smallerDimension*1/4;
+  yLeftEye = yCenter - smallerDimension*1/8;
+  xRightEye = CenterX + smallerDimension*1/4;
+  RightEyey = yCenter - smallerDimension*1/8;
+  eyeDiameter = smallerDimension*1/8;
+  NoseBridgeX = CenterX;
+  NoseBridgeY = yCenter - smallerDimension*1/16;
+  LeftNostrilX = CenterX - smallerDimension*1/10;
+  yLeftEarTip = 0;
+  xLeftEarBase = CenterX - width*7/20;
+  yleftEarBase = yCenter - height*3/20;
+  xLeftEarOtherBase = CenterX - width*1/10;
+  yLeftEarOtherBase = 20;
+  xRightEarTip = CenterX + width*4/10;
+  yRightEarTip = 0;
+  //
+  backgroundColor = ( nightMode==true ) ? color( random(255), random(255), 0 ) : color( random(255), random(255), random(255) ) ; //ternary operator, similar to IF-Else
+  background( backgroundColor );
+  ellipse(FaceX, yFace, FacewidthDiameter, heightDiameterFace);
+  //
+  titleFont = createFont("SansSerif.plain", 55); //Verify the font exists in Processing.JAVA
+ //
+ rect(titleX, titleY, titleWidth, titleHeight);
+  //
 }//End setup
 //
-void draw() {
-  //OS System Button
-  //Start Button | Measles Reset Button
-  //Theme: face & measles with different sizes and colours
-  measlesDynamic(); //Teacher Lesson
-  eyes(); //Student created
-  mouth(); //Student created
-  nose(); //Student created
+void draw()
+{
+  ellipse(xLeftEye, yLeftEye, eyeDiameter, eyeDiameter);
+  ellipse(xRightEye, RightEyey, eyeDiameter, eyeDiameter);
+   triangle(xLeftEarTip, yLeftEarTip, xLeftEarBase, yleftEarBase, xLeftEarOtherBase, yLeftEarOtherBase);
+  triangle(xRightEarTip, yRightEarTip, xRighttEarBase, yRightEarBase, xRightEarOtherBase, RightEarOtherBasey);
+  triangle(NoseBridgeX, NoseBridgeY, LeftNostrilX, yLeftNostril, xRightNostril, yRightNostril);
+  line(xLeftMouth, yLeftMouth, xRightMouth, yRightMouth);
+  //
+  fill(blue);
+ textAlign(CENTER, CENTER);
+  textFont(titleFont, titlesize);
+ text(title, titleX, titleY, titleWidth, titleHeight);
+ fill(resetDefaultInk);
+ //Values: [ LEFT, CENTER, RIGHT ] & [ TOP, CENTER, BOTTOM, BASELINE]
+ titlesize = 20;
+  //
+  xMeasle = random(CenterX-FaceRadius, CenterX+FaceRadius);
+  yMeasle = random(smallerDimension);
+  fill(red);
+  noStroke();
+  measleDiameter = random(smallerDimension*1/75, smallerDimension*1/25);//smallerDimension*1/50;
+  ellipse(xMeasle, yMeasle, measleDiameter, measleDiameter);
+  stroke(1); //reset default
+  fill(resetWhite);
+  //
 }//End draw
 //
 void keyPressed() {
-  //KeyBoard Shortcuts
-  if ( key=='N' | key=='n') {
-    if ( nightMode==false ) {
-      nightMode = true;
-    } else {
-      nightMode=false;
-    }
-  }
 }//End keyPressed
 //
 void mousePressed() {
-  //OS System Button
-  //Start Button
-  //Quit Button
-  //Night Mode
+    //Technically, there are 4 ways to code a mouse button press
+  //
+   if ( mouseButton == RIGHT ) { //Night Mode TRUE
+    backgroundColor = color( random(255), random(255), 0 );
+    background( backgroundColor );
+    ellipse(FaceX, yFace, FacewidthDiameter, heightDiameterFace);
+  }
+  if ( mouseButton == LEFT ) { //Night Mode FALSE
+    backgroundColor = color( random(255), random(255), random(255) ) ; 
+    background( backgroundColor );
+    ellipse(FaceX, yFace, FacewidthDiameter, heightDiameterFace);
+  }//End Left Mouse Button
+  //
 }//End mousePressed
 //
 //End MAIN Program
-int mouthOpen;
-float mouthX1, mouthY1, mouthX2, mouthY2;
-//
-void mouth() {
-  int mouthWidth = int ( mouthX2 - mouthX1 ); //length=end-beginning
-  int mouthHeight = mouthOpen;
-  //rect(mouthX1-mouthHeight*1/2, mouthY1-mouthHeight*1/2, mouthWidth+mouthOpen, mouthHeight);
-  strokeWeight(mouthOpen); //testing: 100=400/4, mouthOpen=height*1/4
-  line(mouthX1, mouthY1, mouthX2, mouthY2);
-  strokeWeight(reset); //reset to 1 pixel
-  //comparison rect() line only, no caps, no strokeWeight
-  //rect(mouthX1, mouthY1, mouthWidth, mouthHeight); 
-} //End mouth
-//
-//End Mouth Subprogram
-float xNose1, yNose1, xNose2, yNose2, xNose3, yNose3;
-//
-void nose() {
-  //rect(xNose2, yNose1, xNose3-xNose2, yNose3-yNose1);
-  triangle(xNose1, yNose1, xNose2, yNose2, xNose3, yNose3);
-} //End nose
-//
-//End Nose Subprogram
-void population() {
-  float centerX = appWidth*1/2;
-  float centerY = appHeight*1/2;
-  //
-  int smallerDimension;
-  smallerDimension = ( landscape == true) ? appHeight : appWidth;
-  println(smallerDimension);
-  //
-  rectFaceX = centerX - smallerDimension*1/2;
-  rectFaceY = appHeight * 0;
-  rectFaceWidth = smallerDimension;
-  rectFaceHeight = rectFaceWidth; //rectFace is square
-  faceX = centerX;
-  faceY  = centerY;
-  faceDiameter = smallerDimension;
-  //
-  leftEyeX = appWidth*1.4/4;
-  rightEyeX = appWidth*2.6/4;
-  leftEyeY = appHeight*1/4;
-  rightEyeY = leftEyeY; //Best Practice: change one line of code
-  eyeDiameter = smallerDimension*1/4;
-  //
-  mouthX1 = leftEyeX;
-  mouthY1 = smallerDimension*3/4;
-  mouthX2 = rightEyeX;
-  mouthY2 = mouthY1;
-  mouthOpen = smallerDimension*1/4;
-  //
-  xNose1 = faceX;
-  yNose1 = leftEyeY;
-  xNose2 = faceX - leftEyeY*1/2;
-  yNose2 = faceY ;
-  xNose3 = faceX + leftEyeY*1/2;
-  yNose3 = faceY ;
-} //End Population
-//
-// End Population Subprogram
